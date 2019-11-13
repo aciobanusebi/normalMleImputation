@@ -43,7 +43,7 @@ runEm <- function(data,maxIterations,oldParams=NULL,howToStop = "params",eps = 1
     if(howToStop == "loglike") {
       logLike <- logLikelihood(data,params)
       print(logLike)
-      if(abs(logLike - oldLogLike)/oldLogLike < eps) {
+      if(abs(logLike - oldLogLike)/abs(oldLogLike) < eps) {
         print("STOP: loglike")
         return(params)
       }
