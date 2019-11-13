@@ -1,0 +1,10 @@
+Package: normalMleImputation
+Title: Imputation via MLE for normal distribution with missing data
+Version: 0.0.0.9000
+Authors@R: person("Sebastian", "Ciobanu", email = "aciobanusebi@gmail.com", role = c("aut", "cre"))
+Description: Imputation via MLE for normal distribution with missing data. The algorithm used is EM for learning the MLE parameters: mu and Sigma. Then, using the conditional probability, the missing data is imputed.
+Depends: R (>= 3.4.4)
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
