@@ -3,13 +3,13 @@ execIteration <- function(params,data) {
   nCol <- ncol(data)
   mu <- params$mu
   Sigma <- params$Sigma
-  E_x <- list()
-  E_xx <- list()
+  sum_E_x <- 0
+  sum_E_xx <- 0
   for(i in 1:nRow) {
     x_i <- convertToColumnVector(data[i,,drop=FALSE])
     E_x_i <- x_i
     isNaIndexes <- which(is.na(x_i))
-    
+
     if(length(isNaIndexes)) {
       distr <- getConditionalDistribution(x_i,mu,Sigma,isNaIndexes)
       E_x_i[isNaIndexes] <- distr$mu
@@ -18,21 +18,13 @@ execIteration <- function(params,data) {
     } else {
       E_xx_i <- x_i %*% t(x_i)
     }
-    E_x[[i]] <- E_x_i
-    E_xx[[i]] <- E_xx_i
+    sum_E_x <- sum_E_x + E_x_i
+    sum_E_xx <- sum_E_xx + E_xx_i
   }
-  mu <- 0
-  for(i in 1:nRow) {
-    mu <- mu + E_x[[i]]
-  }
-  mu <- mu/nRow
-  
-  Sigma <- 0
-  for(i in 1:nRow) {
-    Sigma <- Sigma + E_xx[[i]] - E_x[[i]] %*% t(mu) - mu %*% t(E_x[[i]]) +  mu %*% t(mu)
-  }
+  mu <- sum_E_x/nRow
+  Sigma <- sum_E_xx - sum_E_x %*% t(mu) - mu %*% t(sum_E_x) + nRow * mu %*% t(mu)
   Sigma <- Sigma/nRow
-  
+
   list(
     mu=mu,
     Sigma=Sigma
